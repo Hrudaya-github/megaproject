@@ -40,7 +40,7 @@ pipeline {
         stage('Upload Code in Artifact '){
             steps{
                 script{
-                    
+
                     def readPomVersion = readMavenPom file: 'pom.xml'
 
                     def nexusRepo = readMavenPom.version.endsWith("SNAPSHOT") ? "demoapp-snapshot" : "demoapp-release"
@@ -51,7 +51,7 @@ pipeline {
                             artifactId: 'springboot', 
                             classifier: '', 
                             file: 'target/Uber.jar', 
-                            type: '.jar'
+                            type: 'jar'
                         ]
                     ], 
                         credentialsId: 'nexus-auth', 
@@ -60,7 +60,7 @@ pipeline {
                         nexusVersion: 'nexus3',
                         protocol: 'http',
                         repository: nexusRepo, 
-                        version: "${readPomVersion.version}"
+                        version: readPomVersion.version
                 }
             }
         }
