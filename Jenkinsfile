@@ -40,8 +40,11 @@ pipeline {
         stage('Upload Code in Artifact '){
             steps{
                 script{
-                    def readPomVersion = readMavenPomfile: 'pom.xml'
+                    
+                    def readPomVersion = readMavenPom file: 'pom.xml'
+
                     def nexusRepo = readMavenPom.version.endsWith("SNAPSHOT") ? "demoapp-snapshot" : "demoapp-release"
+
                     nexusArtifactUploader artifacts: 
                     [
                         [
