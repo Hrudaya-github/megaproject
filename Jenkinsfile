@@ -80,5 +80,17 @@ pipeline {
                 }
             }
         }
+        stage('Image push to docker hub'){
+            steps{
+                script{
+                    withCredentials([string(credentialsId: 'docker_auth', variable: 'docker_hub_cred')]) {
+                      sh 'docker login -u hr143heart -p ${docker_hub_cred}'
+                      sh 'docker images push hr143heart/$JOB_NAME:v1.$BUILD_ID'
+                      sh 'docker images push hr143heart/$JOB_NAME:latest'
+                    }
+                }
+            }
+        }
     }
 }
+
