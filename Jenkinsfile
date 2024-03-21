@@ -31,7 +31,7 @@ pipeline {
         stage('Code Quality Analysis & Package'){
             steps {
                 script{
-                    withSonarQubeEnv(credentialsId: 'sonar-api') {
+                    withSonarQubeEnv(credentialsId: 'sonar-auth') {
                     sh 'mvn clean package sonar:sonar'
                     }
                 }                
@@ -40,7 +40,7 @@ pipeline {
         stage('Quality Gate Status'){
             steps {
                 script{
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-api'
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-auth'
                 }
             }
         }
@@ -63,7 +63,7 @@ pipeline {
                     ], 
                         credentialsId: 'nexus-auth', 
                         groupId: 'com.example', 
-                        nexusUrl: '35.153.19.242:8081', 
+                        nexusUrl: '52.90.245.81:8081', 
                         nexusVersion: 'nexus3',
                         protocol: 'http',
                         repository: nexusRepo, 
