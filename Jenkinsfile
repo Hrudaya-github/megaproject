@@ -8,17 +8,24 @@ pipeline {
         }
         stage('Unit Testing'){
             steps {
-                sh 'mvn test'
+                script{
+                    sh 'mvn test'
+                }
+                
             }
         }
         stage('Integration Testing'){
             steps {
-                sh 'mvn verify -DskipUnitTests'
+                script{
+                    sh 'mvn verify -DskipUnitTests'
+                }
             }
         }
         stage('Maven Build'){
             steps {
-                sh 'mvn clean install'
+                script{
+                    sh 'mvn clean install'
+                }
             }
         }
         stage('Code Quality Analysis & Package'){
@@ -61,6 +68,15 @@ pipeline {
                         protocol: 'http',
                         repository: nexusRepo, 
                         version: pom.version
+                }
+            }
+        }
+        stage('Docker Image Build'){
+            steps {
+                script{
+                    sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
+                    sh 'docker image tag $JOB_NAME:v1.$BUILD_ID hr143heart/$JOB_NAME:v1.$BUILD_ID '
+                    sh 'docker image tag $JOB_NAME:v1.$BUILD_ID hr143heart/$JOB_NAME:latest '
                 }
             }
         }
